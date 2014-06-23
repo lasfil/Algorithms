@@ -221,6 +221,116 @@ public class BiLinkedList<T> {
 
 	}
 
+	public static <T extends Comparable<T>> void mergeSort(BiLinkedList<T> bl) {
+		if (bl.size() < 2)
+			return;
+
+		Node<T> head = new Node<T>(null, null, bl.first);
+		bl.first.pre = head;
+		Node<T> rear = new Node<T>(bl.last, null, null);
+		bl.last.next = rear;
+
+		mergeSort(bl, head, rear);
+
+		bl.first = head.next;
+		bl.last = rear.pre;
+		bl.first.pre = bl.last;
+		bl.last.next = bl.first;
+
+		head = null;
+		rear = null;
+	}
+
+	private static <T extends Comparable<T>> void mergeSort(BiLinkedList<T> bl,
+			Node<T> start, Node<T> end) {
+		if (start.next == end) {
+			return;
+		}
+
+		final Node<T> head = start;
+
+		final Node<T> rear = end;
+
+		Node<T> subList1 = new Node<T>(null, null, null);
+		Node<T> endList1 = new Node<T>(subList1, null, null);
+		subList1.next = endList1;
+		Node<T> subList2 = new Node<T>(null, null, null);
+		Node<T> endList2 = new Node<T>(subList2, null, null);
+		subList2.next = endList2;
+
+		int count = 0;
+		// int sl1Size = 0;
+		// int sl2Size =0;
+
+		// Node<T> n = start.next;
+
+		while (head.next != rear) {
+			count++;
+			Node<T> n = head.next;
+			head.next = n.next;
+			head.next.pre = head;
+			if (count % 2 == 1) {
+				n.pre = endList1.pre;
+				n.pre.next = n;
+				endList1.pre = n;
+				n.next = endList1;
+			} else {
+				n.pre = endList2.pre;
+				n.pre.next = n;
+				endList2.pre = n;
+				n.next = endList2;
+			}
+
+		}
+
+		if (subList1.next != endList1.pre) {
+			mergeSort(bl, subList1, endList1);
+		}
+
+		if (subList2.next != endList2.pre) {
+			mergeSort(bl, subList2, endList2);
+		}
+
+		while (subList1.next != endList1 && subList2.next != endList2) {
+			Node<T> n;
+			if (subList1.next.data.compareTo(subList2.next.data) <= 0) {
+				n = subList1.next;
+				subList1.next = n.next;
+				subList1.next.pre = subList1;
+			} else {
+				n = subList2.next;
+				subList2.next = n.next;
+				subList2.next.pre = subList2;
+			}
+
+			rear.pre.next = n;
+			n.pre = rear.pre;
+			n.next = rear;
+			rear.pre = n;
+		}
+
+		if (subList1.next != endList1) {
+			rear.pre.next = subList1.next;
+			subList1.next.pre = rear.pre;
+			endList1.pre.next = rear;
+			rear.pre = endList1.pre;
+			subList1.next = endList1;
+			endList1.pre = subList1;
+
+		}
+
+		if (subList2.next != endList2) {
+			rear.pre.next = subList2.next;
+			subList2.next.pre = rear.pre;
+			endList2.pre.next = rear;
+			rear.pre = endList2.pre;
+			subList2.next = endList2;
+			endList2.pre = subList2;
+
+		}
+
+	}
+
 	private static class Node<T> {
 		private T data;
 		private Node<T> pre;

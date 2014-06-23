@@ -9,17 +9,24 @@ public class BiLinkedListTest {
 	@Test
 	public void testAddLast() {
 		BiLinkedList<String> l = new BiLinkedList<String>();
-		l.addLast("7");
-		l.addLast("6");
-		l.addLast("5");
-		l.addLast("4");
-		l.addLast("3");
+		l.addLast("a");
+		l.addLast("c");
+		l.addLast("e");
+		l.addLast("h");
+		l.addLast("d");
+		//l.addLast("5");
+		l.addLast("x");
+		//l.addLast("5");
+
+
 		
 
 		//BiLinkedList.selectSort(l);
 		//BiLinkedList.insertionSort(l);
 		BiLinkedList.bubbleSort(l);
 		//BiLinkedList.quickSort(l);
+		//BiLinkedList.mergeSort(l);
+		//System.out.println("17".compareTo("5"));
 		System.out.println(l);
 
 

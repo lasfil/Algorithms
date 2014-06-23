@@ -7,7 +7,7 @@ import java.util.List;
 public class OrderListCmp {
 
 	public static void main(String[] args) {
-		List<Integer> la = Arrays.asList(5, 3, 4, 34, 23, 99);
+		List<Integer> la = Arrays.asList(5, 3, 4, 34, 23, 155);
 		List<Integer> lb = Arrays.asList(4, 5, 3, 23, 34, 99,123);
 
 		int s = compare(la, lb);
