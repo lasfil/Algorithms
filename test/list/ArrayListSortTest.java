@@ -76,5 +76,25 @@ public class ArrayListSortTest {
 		out.println(al);
 	}
 	
+	@Test
+	public void testMergeSort() {
+		ArrayList<Integer> al = new ArrayList<Integer>();
+		
+		al.add(3);
+		al.add(12);
+		al.add(1);
+		al.add(36);
+		al.add(8);
+		al.add(97);
+		al.add(7);
+		al.add(2);
+		al.add(5);
+
+
+		ArrayLIstSort.mergeSort(al);
+
+		out.println(al);
+	}
+	
 
 }

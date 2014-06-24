@@ -1,4 +1,4 @@
-package com.zenkirin;
+package stack;
 
 import static org.junit.Assert.*;
 

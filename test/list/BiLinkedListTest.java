@@ -28,6 +28,8 @@ public class BiLinkedListTest {
 		//BiLinkedList.mergeSort(l);
 		//System.out.println("17".compareTo("5"));
 		System.out.println(l);
+		
+		
 
 
 		
