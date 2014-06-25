@@ -129,11 +129,12 @@ public class BiLinkedList<T> {
 		bl.last.next = rear;
 		Node<T> position = rear;
 		Node<T> n;
+		boolean mod;
 		// 这里使用position.pre作为游标，因为该值有可能变动位置，如果只使用position，可能会因为交换位置而改动游标应处的位置
 		// position作为外部游标，从rear到第二个结点截止，相当于序列中count从length-1到第一个位置
-		while (position.pre != head.next) {
+		do {
 			n = head;
-			boolean mod = false;
+			mod = false;
 			// n作为内部游标，同样不能直接指向会换位的结点，所以比较的是n的后两个结点，使得结点互换完毕后n保持位置不动
 			// n从头向后遍历，直到n的下一个结点是position的前一个结点，此时n.next.next是position，不予比较
 			while (n.next != position.pre) {
@@ -150,10 +151,9 @@ public class BiLinkedList<T> {
 
 			}
 			System.out.println("compare");
-			if (mod == false)
-				break;
+
 			position = position.pre;
-		}
+		} while (position.pre != head.next && mod == true);
 
 		bl.first = head.next;
 		bl.last = rear.pre;
@@ -329,6 +329,64 @@ public class BiLinkedList<T> {
 
 		}
 
+	}
+
+	public static void radixSort(BiLinkedList<Integer> bl, int digitCount) {
+		Node<Integer>[] radixes = (Node<Integer>[]) new Node[10];
+		for (int i = 0; i < radixes.length; i++) {
+			radixes[i] = new Node<Integer>(null, null, null);
+			radixes[i].next = radixes[i];
+			radixes[i].pre = radixes[i];
+		}
+
+		Node<Integer> head = new Node<Integer>(null, null, bl.first);
+		bl.first.pre = head;
+		
+		Node<Integer> rear = new Node<Integer>(bl.last, null, null);
+		bl.last.next = rear;
+
+		// Node<Integer> n;
+		Node<Integer> temp;
+
+		for (int i = digitCount - 1; i >= 0; i--) {
+			// n = head;
+			while (head.next != rear) {
+				temp = head.next;
+				head.next = temp.next;
+				head.next.pre = head;
+				//head = head.next;
+
+				int digitValue = Character.digit(temp.data.toString()
+						.toCharArray()[i], 10);
+
+				temp.pre = radixes[digitValue].pre;
+				temp.pre.next = temp;
+				temp.next = radixes[digitValue];
+				temp.next.pre = temp;
+			}
+
+			for (int j = 0; j < 10; j++) {
+
+				while (radixes[j].pre != radixes[j]) {
+					temp = radixes[j].pre;
+					radixes[j].pre = temp.pre;
+					radixes[j].pre.next = radixes[j];
+
+					rear.pre.next = temp;
+					temp.pre = rear.pre;
+					rear.pre = temp;
+					temp.next = rear;
+
+				}
+			}
+		}
+
+		bl.first = head.next;
+		bl.last = rear.pre;
+		bl.first.pre = bl.last;
+		bl.last.next = bl.first;
+		head = null;
+		rear = null;
 	}
 
 	private static class Node<T> {

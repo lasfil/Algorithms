@@ -3,7 +3,9 @@ package other;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.junit.Test;
 
@@ -28,6 +30,9 @@ public class TectFunctions {
 		System.out.println(al);
 
 		System.out.println(als);
+		
+		List<Integer>[] mailboxes = (ArrayList<Integer>[]) (new ArrayList[4]);
+
 	}
 
 }
