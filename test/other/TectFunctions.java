@@ -32,6 +32,8 @@ public class TectFunctions {
 		System.out.println(als);
 		
 		List<Integer>[] mailboxes = (ArrayList<Integer>[]) (new ArrayList[4]);
+		
+		System.out.println(new Integer(15).compareTo(null));
 
 	}
 

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import tree.BinaryTree.Node;
+
 public class HuffmanTree {
 	public static class Element {
 		private String str;
@@ -195,6 +197,8 @@ public class HuffmanTree {
 		}
 		return mini;
 	}
+	
+	
 
 	private void select(Node[] children) {
 		if (children.length < 2) {

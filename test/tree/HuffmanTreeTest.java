@@ -3,7 +3,6 @@ package tree;
 import static org.junit.Assert.*;
 
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 

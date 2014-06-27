@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MailBox {
-	
+
 	int mailNum, boxNum, min;
 	int[] mails;
-	List<int[]> mailBox ;
-	
+	List<int[]> mailBox;
+
 	public MailBox(int mailNum, int boxNum, int min) {
 		this.mailNum = mailNum;
 		this.boxNum = boxNum;
@@ -18,11 +18,9 @@ public class MailBox {
 	}
 
 	public void mail() {
-		
-		int max = mailNum - boxNum * min + min;
-		
 
-		
+		int max = mailNum - boxNum * min + min;
+
 		for (int b1 = min; b1 <= max; b1++) {
 			for (int b2 = min; b2 <= max; b2++) {
 				for (int b3 = min; b3 <= max; b3++) {
@@ -41,7 +39,7 @@ public class MailBox {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Total combination: " + mailBox.size() + " \n");
 		for (int[] intArr : mailBox) {
-			
+
 			for (int a : intArr) {
 				sb.append(a + " ");
 			}
@@ -49,6 +47,7 @@ public class MailBox {
 		}
 		String result = sb.toString();
 		sb.setLength(0);
+
 		return result;
 	}
 }
