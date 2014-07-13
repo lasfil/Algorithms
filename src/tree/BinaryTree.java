@@ -1,11 +1,19 @@
 package tree;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class BinaryTree<T extends Comparable<T>> {
 
 	protected static class Node<T> {
 		protected Node<T> left;
 		protected Node<T> right;
 		protected T item;
+		
+		Node() {
+			super();
+		}
 
 		Node(Node<T> left, Node<T> right, T item) {
 			this.left = left;
@@ -16,7 +24,7 @@ public class BinaryTree<T extends Comparable<T>> {
 		Node(T item) {
 			this.item = item;
 		}
-		
+
 		public String toString() {
 			return item.toString();
 		}
@@ -69,71 +77,67 @@ public class BinaryTree<T extends Comparable<T>> {
 	 */
 
 	public void inTraverse() {
-		inTraverse(root);
+		inTraverse(root, null);
+		System.out.println();
 	}
 
-	public void inTraverse(BinaryTree<T> tree) {
-		if (tree != null) {
-			inTraverse(tree.root);
-		}
-	}
-
-	private void inTraverse(Node<T> n) {
+	private void inTraverse(Node<T> n, List<T> l) {
 		if (n != null) {
 			if (n.left != null) {
-				inTraverse(n.left);
+				inTraverse(n.left, l);
 			}
 
-			System.out.print(n.item);
+			if (l == null)
+				System.out.print(n.item + " ");
+			else
+				l.add(n.item);
 
 			if (n.right != null) {
-				inTraverse(n.right);
+				inTraverse(n.right, l);
 			}
 		}
 	}
 
 	public void postTraverse() {
-		postTraverse(root);
+		postTraverse(root, null);
+		System.out.println();
+
 	}
 
-	public void postTraverse(BinaryTree<T> tree) {
-		if (tree != null) {
-			postTraverse(tree.root);
-		}
-	}
-
-	private void postTraverse(Node<T> n) {
+	private void postTraverse(Node<T> n, List<T> l) {
 		if (n != null) {
 			if (n.left != null) {
-				postTraverse(n.left);
+				postTraverse(n.left, l);
 			}
 
 			if (n.right != null) {
-				postTraverse(n.right);
+				postTraverse(n.right, l);
 			}
 
-			System.out.print(n.item);
+			if (l == null)
+				System.out.print(n.item + " ");
+			else
+				l.add(n.item);
 
 		}
 	}
 
 	public void preTraverse() {
-		preTraverse(root);
+		preTraverse(root, null);
+		System.out.println();
+
 	}
 
-	public void preTraverse(BinaryTree<T> tree) {
-		if (tree != null) {
-			preTraverse(tree.root);
-		}
-	}
-
-	public void preTraverse(Node<T> n) {
+	private void preTraverse(Node<T> n, List<T> l) {
 		if (n != null) {
-			System.out.print(n.item);
+			if (l == null)
+				System.out.print(n.item + " ");
+			else
+				l.add(n.item);
 			if (n.left != null)
-				preTraverse(n.left);
+				preTraverse(n.left, l);
 			if (n.right != null)
-				preTraverse(n.right);
+				preTraverse(n.right, l);
 
 		}
 	}
@@ -154,26 +158,32 @@ public class BinaryTree<T extends Comparable<T>> {
 	}
 
 	private void stringAppend(StringBuffer sb, Node<T> n, String prefix) {
-		
+
 		if (n != null) {
-			
+
 			sb.append(prefix + n.item.toString());
 			sb.append("\n");
 
 			if (n.left != null) {
 				sb.append("[l]");
 				stringAppend(sb, n.left, prefix + "   ");
-				
+
 			}
 
 			if (n.right != null) {
 				sb.append("[r]");
 
 				stringAppend(sb, n.right, prefix + "   ");
-				
 
 			}
 
 		}
+	}
+
+	public Iterator<T> inOrderIterator() {
+		List<T> l = new ArrayList<T>();
+		this.inTraverse(root, l);
+
+		return l.iterator();
 	}
 }

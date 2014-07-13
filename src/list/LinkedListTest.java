@@ -3,7 +3,11 @@ package list;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class LinkedListTest {
+public class LinkedListTest<T> extends LinkedList<T>{
+	
+	public LinkedListTest() {
+		//Node<T> n =this.first;
+	}
 	public static void main(String[] args) {
 		LinkedList<String> l = new LinkedList<String>();
 

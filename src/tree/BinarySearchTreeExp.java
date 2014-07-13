@@ -183,6 +183,8 @@ public class BinarySearchTreeExp<T extends Comparable<? super T>> {
 		System.out.println();
 		searchTree.remove(4);
 		searchTree.preOrder(searchTree.rootTree);
+		
+		searchTree.contains(new Integer(4));
 	}
    
 }      
