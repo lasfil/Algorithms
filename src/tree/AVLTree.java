@@ -270,7 +270,7 @@ public class AVLTree<T extends Comparable<T>> {
 				}
 			}
 		}
-		if (Math.abs(node.bf) == 2) {
+		if (node != null && Math.abs(node.bf) == 2) {
 			node = rebalance(node);
 		}
 		return node;
@@ -322,9 +322,17 @@ public class AVLTree<T extends Comparable<T>> {
 			if (node.left != null && node.right != null) {
 				node.item = findMin(node.right).item;
 				node.right = remove(node.item, node.right);
+				node.updateRh();
 			} else {
 				node = (node.left != null) ? node.left : node.right;
+				if (node != null) {
+					node.updateLh();
+					node.updateRh();
+				}
 			}
+		}
+		if (node != null && Math.abs(node.bf) == 2) {
+			node = rebalance(node);
 		}
 		return node;
 
