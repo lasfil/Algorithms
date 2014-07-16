@@ -163,9 +163,9 @@ public class BinaryTreeTest {
 	public void RBTreeTestInsert() {
 		RedBlackTree<Integer> avl = new RedBlackTree<Integer>();
 
-		// int[] a = new int[] { 50, 30, 20, 35, 41, 5, 18, 80, 70, 500, 52, 59,
-		// 300, 505, 103, 299, 600, 800, 405, 540,39, 48, 190, 290, 399,
-		// 350,355,291, 292, 293 };
+		/*int[] a = new int[] { 50, 30, 20, 35, 41, 5, 18, 80, 70, 500, 52, 59,
+		 300, 505, 103, 299, 600, 800, 405, 540,39, 48, 190, 290, 399,
+		350,355,291, 292, 293 };*/
 
 		int[] a = new int[] { 12, 1, 9, 2, 0, 11, 7, 19, 4, 15, 18, 5, 14, 13,
 				10, 16, 6, 3, 8, 17 };
@@ -181,12 +181,12 @@ public class BinaryTreeTest {
 		// avl.add(new Integer(48));
 		// avl.add(new Integer(47));
 		out.println(avl);
-
-		/*
-		 * avl.remove(new Integer(3)); avl.remove(new Integer(10));
-		 * avl.remove(new Integer(399)); avl.remove(new Integer(600));
-		 * avl.remove(new Integer(500)); avl.remove(new Integer(800));
-		 * out.println(avl);
-		 */
+		
+		for (Integer inte :l) {
+			out.println("remove: " + inte);
+			avl.remove(inte);
+			out.println(avl);
+		}
+			
 	}
 }

@@ -9,24 +9,26 @@ public class RedBlackTree<T extends Comparable<T>> {
 		private Node<T> left;
 		private Node<T> right;
 		private T item;
-		private int color;
+		private boolean color;
 		private Node<T> parent;
+		private static final boolean BLACK = true;
+		private static final boolean RED = false;
 
 		Node(Node<T> left, Node<T> right, T item, Node<T> parent) {
 			this.left = left;
 			this.right = right;
 			this.item = item;
-			color = 0;
+			color = RED;
 			this.parent = parent;
 		}
 
 		Node(T item) {
 			this.item = item;
-			color = 0;
+			color = RED;
 
 		}
 
-		Node(Node<T> left, Node<T> right, T item, Node<T> parent, int color) {
+		Node(Node<T> left, Node<T> right, T item, Node<T> parent, boolean color) {
 			this.left = left;
 			this.right = right;
 			this.item = item;
@@ -35,7 +37,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 		}
 
 		public String toString() {
-			return item.toString() + "[" + color + "]";
+			return item.toString() + "[" + (color ? "B" : "R") + "]";
 		}
 
 		/*
@@ -45,18 +47,26 @@ public class RedBlackTree<T extends Comparable<T>> {
 		 */
 
 		private boolean isRed() {
-			return color == 0;
+			return color == RED;
 		}
 
 		private Node<T> getSibling() {
-			if (parent.isLeft())
-				return parent.parent.right;
+			if (isLeft())
+				return parent.right;
 			else
-				return parent.parent.left;
+				return parent.left;
 		}
 
 		private boolean isLeft() {
 			return (item.compareTo(parent.item) < 0);
+		}
+
+		private boolean getLChildColor() {
+			return (left == null) ? BLACK : left.color;
+		}
+
+		private boolean getRChildColor() {
+			return (right == null) ? BLACK : right.color;
 		}
 
 	};
@@ -64,8 +74,6 @@ public class RedBlackTree<T extends Comparable<T>> {
 	private Node<T> root;
 
 	private int size;
-
-	private Node<T> rear = new Node<T>(null, null, null, null, 1);
 
 	public RedBlackTree() {
 		super();
@@ -213,7 +221,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 	}
 
 	public void add(T element) {
-		System.out.println("add " + element);
+		// System.out.println("add " + element);
 		if (element == null)
 			return;
 		insert(root, element);
@@ -231,7 +239,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 	private Node<T> insert(Node<T> node, T data) {
 		if (node == null) {
 			root = new Node<T>(null, null, data, null);
-			root.color = 1;
+			root.color = Node.BLACK;
 
 		} else {
 			if (data.compareTo(node.item) < 0) {
@@ -243,7 +251,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 					// the new node's parent is red, the RB tree need to be
 					// rebalance
 					if (node.isRed()) {
-						rebalance(node.left);
+						rebalanceAfterInsert(node.left);
 					}
 
 				}
@@ -263,70 +271,45 @@ public class RedBlackTree<T extends Comparable<T>> {
 					// rebalance
 
 					if (node.isRed()) {
-						rebalance(node.right);
+						rebalanceAfterInsert(node.right);
 					}
 				}
 			}
 		}
-		
+
 		return node;
 	}
 
-	private void rebalance(Node<T> node) {
+	private void rebalanceAfterInsert(Node<T> node) {
 		Node<T> current = node;
 		Node<T> sibling = null;
-		Node<T> parentTemp = null;
-		RedBlackTree<T> subTree = null;
 
 		while (current != root && current.parent.isRed()) {
-			sibling = current.getSibling();
+			sibling = current.parent.getSibling();
 			if (sibling == null) {
-				sibling = new Node<T>(null, null, null, null, 1);
+				sibling = new Node<T>(null, null, null, null, Node.BLACK);
 			}
 			if (sibling != null && sibling.isRed()) {
 				// parentrightsibling or parentleftsibling is red
-				current.parent.color = 1;
-				sibling.color = 1;
-				current.parent.parent.color = 0;
+				current.parent.color = Node.BLACK;
+				sibling.color = Node.BLACK;
+				current.parent.parent.color = Node.RED;
 				current = node.parent.parent;
 			} else {
 				if (current.parent.isLeft()) {
 					// current'parent is the left child of grandfather
 					// parentleftsibling is black
 					if (current.isLeft()) {
-						current.parent.color = 1;
-						current.parent.parent.color = 0;
+						current.parent.color = Node.BLACK;
+						current.parent.parent.color = Node.RED;
 						if (current.parent.parent != null) {
-							parentTemp = current.parent.parent.parent;
-							subTree = new RedBlackTree<T>(current.parent.parent);
-							subTree.rightSpin();
-							if (parentTemp == null) {
-								root = subTree.root;
-							} else {
-								if (subTree.root.item
-										.compareTo(parentTemp.item) < 0) {
-									parentTemp.left = subTree.root;
-								} else {
-									parentTemp.right = subTree.root;
-								}
-								subTree.root.parent = parentTemp;
-							}
+							rightSpin(current.parent.parent);
+
 						}
 					} else {
 						current = current.parent;
-						parentTemp = current.parent;
-						subTree = new RedBlackTree<T>(current);
-						subTree.leftSpin();
-						if (parentTemp == null) {
-							root = subTree.root;
-						} else {
-							if (subTree.root.item.compareTo(parentTemp.item) < 0) {
-								parentTemp.left = subTree.root;
-							} else {
-								parentTemp.right = subTree.root;
-							}
-							subTree.root.parent = parentTemp;
-						}
+						leftSpin(current);
+
 					}
 
 				} else {
@@ -334,52 +317,24 @@ public class RedBlackTree<T extends Comparable<T>> {
 					// parentrightsibling is black
 					if (current.isLeft()) {
 						current = current.parent;
-						parentTemp = current.parent;
-						subTree = new RedBlackTree<T>(current);
-						subTree.rightSpin();
-						if (parentTemp == null) {
-							root = subTree.root;
-						} else {
-							if (subTree.root.item.compareTo(parentTemp.item) < 0) {
-								parentTemp.left = subTree.root;
-							} else {
-								parentTemp.right = subTree.root;
-							}
-							subTree.root.parent = parentTemp;
-						}
-
+						rightSpin(current);
 					} else {
-						current.parent.color = 1;
-						current.parent.parent.color = 0;
+						current.parent.color = Node.BLACK;
+						current.parent.parent.color = Node.RED;
 						if (current.parent.parent != null) {
-							parentTemp = current.parent.parent.parent;
-							subTree = new RedBlackTree<T>(current.parent.parent);
-							subTree.leftSpin();
-							if (parentTemp == null) {
-								root = subTree.root;
-							} else {
-								if (subTree.root.item
-										.compareTo(parentTemp.item) < 0) {
-									parentTemp.left = subTree.root;
-								} else {
-									parentTemp.right = subTree.root;
-								}
-								subTree.root.parent = parentTemp;
-							}
+							leftSpin(current.parent.parent);
 						}
 					}
 				}
 			}
 		}
-		root.color = 1;
+		root.color = Node.BLACK;
 		sibling = null;
-		parentTemp = null;
 		current = null;
-		subTree = null;
 	}
 
 	public void remove(T element) {
-		root = remove(element, root);
+		remove(element, root);
 		size--;
 	}
 
@@ -388,22 +343,133 @@ public class RedBlackTree<T extends Comparable<T>> {
 			return node;// 没有找到,doNothing
 		int result = t.compareTo(node.item);
 		if (result > 0) {
-			node.right = remove(t, node.right);
+			remove(t, node.right);
 		} else if (result < 0) {
-			node.left = remove(t, node.left);
+			remove(t, node.left);
 		} else {
 			if (node.left != null && node.right != null) {
 				node.item = findMin(node.right).item;
-				node.right = remove(node.item, node.right);
+				remove(node.item, node.right);
 			} else {
-				node = (node.left != null) ? node.left : node.right;
-				if (node != null) {
+				Node<T> current = (node.left != null) ? node.left
+						: ((node.right != null) ? node.right : node);
+				if (node.left == null & node.right == null) {
+					if (node.parent == null) {
+						root = null;
+					} else {
+						rebalanceBeforeDel(node);
+
+						if (node.isLeft()) {
+							node.parent.left = null;
+						} else {
+							node.parent.right = null;
+						}
+					}
+				} else {
+					current.parent = node.parent;
+
+					if (node.left != null) {
+						if (node.parent == null)
+							root = node.left;
+						else {
+
+							if (node.isLeft()) {
+								node.parent.left = node.left;
+							} else {
+								node.parent.right = node.left;
+							}
+						}
+					} else {
+						if (node.parent == null)
+							root = node.right;
+						else {
+							if (node.isLeft()) {
+								node.parent.left = node.right;
+							} else {
+								node.parent.right = node.right;
+							}
+						}
+					}
+
+					rebalanceBeforeDel(current);
 				}
 			}
 		}
-
 		return node;
+	}
 
+	private void rebalanceBeforeDel(Node<T> current) {
+		Node<T> sibling = null;
+		while (current != null && current != root && !current.isRed()) {
+			sibling = current.getSibling();
+			if (sibling == null) {
+				sibling = new Node<T>(null, null, null, null, Node.BLACK);
+			}
+
+			if (current.isLeft()) {
+				if (sibling.isRed()) {
+					sibling.color = Node.BLACK;
+					current.parent.color = Node.RED;
+					leftSpin(current.parent);
+					sibling = current.getSibling();
+					if (sibling == null) {
+						sibling = new Node<T>(null, null, null, null,
+								Node.BLACK);
+					}
+				}
+
+				if ((sibling.getLChildColor() == Node.BLACK && sibling
+						.getRChildColor() == Node.BLACK)) {
+					sibling.color = Node.RED;
+					current = current.parent;
+				} else {
+					if (sibling.getRChildColor() == Node.BLACK) {
+						sibling.left.color = Node.BLACK;
+						sibling.color = Node.RED;
+						rightSpin(sibling);
+						sibling = current.getSibling();
+					}
+					sibling.color = current.parent.color;
+					current.parent.color = Node.BLACK;
+					sibling.right.color = Node.BLACK;
+					leftSpin(sibling.parent);
+					current = root;
+
+				}
+			} else {
+				if (sibling.isRed()) {
+					sibling.color = Node.BLACK;
+					current.parent.color = Node.RED;
+					rightSpin(current.parent);
+					sibling = current.getSibling();
+					if (sibling == null) {
+						sibling = new Node<T>(null, null, null, null,
+								Node.BLACK);
+					}
+				}
+
+				if (sibling.getLChildColor() == Node.BLACK
+						&& sibling.getRChildColor() == Node.BLACK) {
+					sibling.color = Node.RED;
+					current = current.parent;
+				} else {
+					if (sibling.getLChildColor() == Node.BLACK) {
+
+						sibling.right.color = Node.BLACK;
+
+						sibling.color = Node.RED;
+						leftSpin(sibling);
+						sibling = current.parent.left;
+					}
+					sibling.color = current.parent.color;
+					current.parent.color = Node.BLACK;
+					sibling.left.color = Node.BLACK;
+					rightSpin(sibling.parent);
+					current = root;
+				}
+			}
+		}
+		current.color = Node.BLACK;
 	}
 
 	public T findMin() {
@@ -427,6 +493,24 @@ public class RedBlackTree<T extends Comparable<T>> {
 		return findMin(node.left);// 递归查找
 	}
 
+	private void leftSpin(Node<T> current) {
+		Node<T> parentTemp = current.parent;
+		RedBlackTree<T> subTree = new RedBlackTree<T>(current);
+		subTree.leftSpin();
+		if (parentTemp == null) {
+			root = subTree.root;
+		} else {
+			if (subTree.root.item.compareTo(parentTemp.item) < 0) {
+				parentTemp.left = subTree.root;
+			} else {
+				parentTemp.right = subTree.root;
+			}
+			subTree.root.parent = parentTemp;
+		}
+		parentTemp = null;
+		subTree = null;
+	}
+
 	public void leftSpin() {
 		if (root == null) {
 			return;
@@ -448,6 +532,24 @@ public class RedBlackTree<T extends Comparable<T>> {
 		root = head.right;
 		root.parent = null;
 		head = null;
+	}
+
+	private void rightSpin(Node<T> current) {
+		Node<T> parentTemp = current.parent;
+		RedBlackTree<T> subTree = new RedBlackTree<T>(current);
+		subTree.rightSpin();
+		if (parentTemp == null) {
+			root = subTree.root;
+		} else {
+			if (subTree.root.item.compareTo(parentTemp.item) < 0) {
+				parentTemp.left = subTree.root;
+			} else {
+				parentTemp.right = subTree.root;
+			}
+			subTree.root.parent = parentTemp;
+		}
+		parentTemp = null;
+		subTree = null;
 	}
 
 	public void rightSpin() {
