@@ -245,7 +245,6 @@ public class RedBlackTree<T extends Comparable<T>> {
 			if (data.compareTo(node.item) < 0) {
 				if (node.left != null) {
 					insert(node.left, data);
-
 				} else {
 					node.left = new Node<T>(null, null, data, node);
 					// the new node's parent is red, the RB tree need to be
@@ -258,13 +257,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 			} else if (data.compareTo(node.item) >= 0) {
 				if (node.right != null) {
 					insert(node.right, data);
-					// the height of right child has changed, get the new height
-					// and plus one, then set to this node's right child tree
-					// height
-					/*
-					 * if (Math.abs(node.bf) == 2) { node.right =
-					 * rebalance(node.right); }
-					 */
+
 				} else {
 					node.right = new Node<T>(null, null, data, node);
 					// the new node's parent is red, the RB tree need to be
@@ -351,6 +344,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 				node.item = findMin(node.right).item;
 				remove(node.item, node.right);
 			} else {
+				//set the current node to be used later for rebalance start point
 				Node<T> current = (node.left != null) ? node.left
 						: ((node.right != null) ? node.right : node);
 				if (node.left == null & node.right == null) {

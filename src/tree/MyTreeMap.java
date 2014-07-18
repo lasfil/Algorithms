@@ -1,7 +1,5 @@
 package tree;
 
-import java.util.Map;
-import java.util.TreeMap;
 
 public class MyTreeMap<K extends Comparable<K>> {
 	private transient Entry<K> root = null;
