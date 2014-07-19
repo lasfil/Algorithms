@@ -83,7 +83,10 @@ public class HeapADT<T extends Comparable<T>> {
 	}
 
 	public int size() {
-		return size;
+		if (root != null)
+			return root.size;
+		else
+			return 0;
 	}
 
 	public String toString() {
@@ -128,7 +131,7 @@ public class HeapADT<T extends Comparable<T>> {
 		 */
 
 		size = root.size;
-		
+
 	}
 
 	private Node<T> insert(Node<T> node, T data) {
@@ -145,7 +148,7 @@ public class HeapADT<T extends Comparable<T>> {
 					node.item = node.left.item;
 					node.left.item = temp;
 				}
-			} else  {
+			} else {
 				node.right = insert(node.right, data);
 				if (node.item.compareTo(node.right.item) > 0) {
 					T temp = node.item;
@@ -155,15 +158,102 @@ public class HeapADT<T extends Comparable<T>> {
 			}
 
 		}
-		
+
 		node.updateSize();
-		
-		
+
 		return node;
 	}
-	
+
 	public T findMin() {
 		return root.item;
 	}
 
+	public T removeMin() {
+		T remove = root.item;
+		Node<T> last = removeLast(root);
+		if (last != null) {
+			root.item = last.item;
+			sort(root);
+		} else
+			root = null;
+
+		return remove;
+	}
+
+	private void sort(Node<T> node) {
+		int cmpNL, cmpNR, cmpLR;
+		if (node == null || (node.left == null && node.right == null)) {
+			return;
+		} else if (node.left == null) {
+			cmpNL = -1;
+			cmpLR = 1;
+			cmpNR = node.item.compareTo(node.right.item);
+
+		} else if (node.right == null) {
+			cmpNR = -1;
+			cmpLR = -1;
+			cmpNL = node.item.compareTo(node.left.item);
+
+		} else {
+			cmpNL = node.item.compareTo(node.left.item);
+			cmpNR = node.item.compareTo(node.right.item);
+			cmpLR = node.left.item.compareTo(node.right.item);
+
+		}
+
+		T temp = null;
+		if (cmpNL == 1 && cmpNR == 1) {
+			if (cmpLR < 0) {
+				temp = node.left.item;
+				node.left.item = node.item;
+				node.item = temp;
+				sort(node.left);
+			} else {
+				temp = node.right.item;
+				node.right.item = node.item;
+				node.item = temp;
+				sort(node.right);
+			}
+		} else if (cmpNL == 1) {
+			temp = node.left.item;
+			node.left.item = node.item;
+			node.item = temp;
+			sort(node.left);
+		} else if (cmpNR == 1) {
+			temp = node.right.item;
+			node.right.item = node.item;
+			node.item = temp;
+			sort(node.right);
+		}
+
+	}
+
+	private Node<T> removeLast(Node<T> node) {
+		Node<T> last = null;
+		if (node == null || (node.left == null && node.right == null))
+			return last;
+		int ls = node.getLeftSize();
+		int rs = node.getRightSize();
+		if (rs == 1 && ls == 1) {
+			last = node.right;
+			node.right = null;
+			// node.updateSize();
+		} else if (rs == 0 && ls == 1) {
+			last = node.left;
+			node.left = null;
+			// node.updateSize();
+		} else if (ls == rs || (rs & (rs + 1)) != 0) {
+			last = removeLast(node.right);
+		} else {
+			last = removeLast(node.left);
+		}
+
+		node.updateSize();
+
+		return last;
+	}
+
+	public T removeLast() {
+		return removeLast(root).item;
+	}
 }
