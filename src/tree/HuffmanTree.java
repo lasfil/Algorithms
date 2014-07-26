@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import tree.BinaryTree.Node;
 
 public class HuffmanTree {
 	public static class Element {

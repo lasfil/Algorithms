@@ -1,6 +1,5 @@
 package tree;
 
-import tree.BinaryTree.Node;
 
 public class HeapADT<T extends Comparable<T>> {
 	private static class Node<T extends Comparable<T>> {
@@ -28,6 +27,7 @@ public class HeapADT<T extends Comparable<T>> {
 			return item.toString() + "[" + size + "]";
 		}
 
+		@SuppressWarnings("unused")
 		private Node<T> getSibling() {
 			if (isLeft())
 				return parent.right;
@@ -143,14 +143,14 @@ public class HeapADT<T extends Comparable<T>> {
 			// left size
 			if (ls == rs || (ls & (ls + 1)) != 0) {
 				node.left = insert(node.left, data);
-				if (node.item.compareTo(node.left.item) > 0) {
+				if (node.item.compareTo(node.left.item) >= 0) {
 					T temp = node.item;
 					node.item = node.left.item;
 					node.left.item = temp;
 				}
 			} else {
 				node.right = insert(node.right, data);
-				if (node.item.compareTo(node.right.item) > 0) {
+				if (node.item.compareTo(node.right.item) >= 0) {
 					T temp = node.item;
 					node.item = node.right.item;
 					node.right.item = temp;
@@ -173,14 +173,14 @@ public class HeapADT<T extends Comparable<T>> {
 		Node<T> last = removeLast(root);
 		if (last != null) {
 			root.item = last.item;
-			sort(root);
+			heapfi(root);
 		} else
 			root = null;
 
 		return remove;
 	}
 
-	private void sort(Node<T> node) {
+	private void heapfi(Node<T> node) {
 		int cmpNL, cmpNR, cmpLR;
 		if (node == null || (node.left == null && node.right == null)) {
 			return;
@@ -203,27 +203,27 @@ public class HeapADT<T extends Comparable<T>> {
 
 		T temp = null;
 		if (cmpNL == 1 && cmpNR == 1) {
-			if (cmpLR < 0) {
+			if (cmpLR <= 0) {
 				temp = node.left.item;
 				node.left.item = node.item;
 				node.item = temp;
-				sort(node.left);
+				heapfi(node.left);
 			} else {
 				temp = node.right.item;
 				node.right.item = node.item;
 				node.item = temp;
-				sort(node.right);
+				heapfi(node.right);
 			}
 		} else if (cmpNL == 1) {
 			temp = node.left.item;
 			node.left.item = node.item;
 			node.item = temp;
-			sort(node.left);
+			heapfi(node.left);
 		} else if (cmpNR == 1) {
 			temp = node.right.item;
 			node.right.item = node.item;
 			node.item = temp;
-			sort(node.right);
+			heapfi(node.right);
 		}
 
 	}
