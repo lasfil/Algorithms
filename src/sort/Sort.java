@@ -36,7 +36,13 @@ public abstract class Sort {
 			this.next = next;
 		}
 		public String toString() {
-			return val + "";
+			StringBuffer sb = new StringBuffer();
+			sb.append(val).append(" ");
+			if (next != null) {
+				sb.append(next.toString());
+			}
+			
+			return sb.toString();
 		}
 	}
 	

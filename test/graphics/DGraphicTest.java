@@ -9,24 +9,46 @@ public class DGraphicTest {
 
 	@Test
 	public void testAdd() {
-		DGraphic flights = new DGraphic(new String[] { "BJ", "SH", "SZ", "XN",
-				"CD", "HK" });
-		flights.addArc(0, 1, 1600);
-		flights.addArc(0, 2, 2500);
-		flights.addArc(0, 3, 1800);
-		flights.addArc(0, 4, 2600);
-		flights.addArc(1, 2, 1000);
-		flights.addArc(1, 5, 1600);
-		flights.addArc(2, 4, 1200);
-		flights.addArc(2, 5, 200);
-		flights.addArc(3, 0, 1800);
-		flights.addArc(3, 1, 2000);
-		flights.addArc(4, 0, 2600);
-		flights.addArc(4, 2, 1200);
-		flights.addArc(5, 0, 3200);
-		flights.addArc(5, 1, 1600);
+		DGraphic flights = new DGraphic(new String[] { "0", "1", "2", "3",
+				"4", "5" ,"6", "7","8","9","10", "11","12"});
+		flights.addArc(4, 2, 0);
+		flights.addArc(2, 3, 0);
+		flights.addArc(3, 2, 0);
+		flights.addArc(6, 0, 0);
+		flights.addArc(0, 1, 0);
+		flights.addArc(2, 0, 0);
+		flights.addArc(11, 12, 0);
+		flights.addArc(12, 9, 0);
+		flights.addArc(9, 10, 0);
+		flights.addArc(9, 11, 0);
+		flights.addArc(8, 9, 0);
+		flights.addArc(10, 12, 0);
+		flights.addArc(11, 4, 0);
+		flights.addArc(4, 3, 0);
+		flights.addArc(3, 5, 0);
+		flights.addArc(7, 8, 0);
+		flights.addArc(8, 7, 0);
+		flights.addArc(5, 4, 0);
+		flights.addArc(0, 5, 0);
+		flights.addArc(6, 4, 0);
+		flights.addArc(6, 9, 0);
+		flights.addArc(7, 6, 0);
 
-		out.println(flights);
+
+
+
+
+		//out.println(flights);
+		//flights.depthFirstSearch();
+		//flights.connectedVertice("TJ");
+		out.println(flights.depthFirstPath("6", "2"));
+		out.println(flights.depthFirstPath("2", "6"));
+		//out.println(flights.breadthFirstPath("HK", "CD"));
+		//flights.breadthFirstSearch();
+		//out.println(flights.hasCycle());
+		//out.println(flights.reverse().topoOrder());
+		//out.println("-----");
+		out.println(flights.stronglyConnected("2", "6"));
 	}
 
 }
