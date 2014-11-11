@@ -96,7 +96,7 @@ public class MergeSort extends Sort {
 		anchor = null;
 		return head;
 	}
-
+	
 	public static ListNode merge(ListNode first, ListNode second) {
 		if (first == null) {
 			return second;
@@ -127,6 +127,7 @@ public class MergeSort extends Sort {
 		front = null;
 		return first;
 	}
+	
 	
 
 }

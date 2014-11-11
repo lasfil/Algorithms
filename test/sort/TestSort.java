@@ -1,6 +1,5 @@
 package sort;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,10 +18,9 @@ public class TestSort {
 
 	@Before
 	public void setUp() {
-		a = new int[][] { // { 4, 3, 2, 9, 6, 8, 5, 7, 16, 12, 14, 1, 23, 16,
-							// 18, 15, 21, 2 }, { 0 },
-		// { 40, 3, 3, 2, 2, }, { 0, 0 },
-				{ 2, 1, 2 }, { 2, 2, 1 } };
+		a = new int[][] {
+				{ 4, 3, 2, 9, 6, 8, 5, 7, 16, 12, 14, 1, 23, 16, 18, 15, 21, 2, 23, 23 },
+				{ 0 }, { 40, 3, 3, 2, 2, }, { 0, 0, 0, 0 }, { 2, 1, 2 }, { 2, 2, 1 } };
 		n = new ListNode[a.length][a[0].length];
 		for (int j = 0; j < a.length; j++) {
 			int[] arr = a[j];
@@ -109,6 +107,21 @@ public class TestSort {
 	public void testHeapSort() {
 		for (int[] arr : a) {
 			HeapSort.heapSort(arr);
+			printArray(arr);
+		}
+	}
+
+	@Test
+	public void testSelectionSort() {
+		for (int[] arr : a) {
+			SelectionSort.selectionSort(arr);
+			printArray(arr);
+		}
+	}
+	@Test
+	public void testBubbleSort() {
+		for (int[] arr : a) {
+			BubbleSort.bubbleSort(arr);
 			printArray(arr);
 		}
 	}
