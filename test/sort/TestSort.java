@@ -125,5 +125,12 @@ public class TestSort {
 			printArray(arr);
 		}
 	}
+	@Test
+	public void testRadixSort() {
+		int[] a = new int[]{12345, 43253, 234, 76483, 1234, 1, 22, 1, 4321, 23, 5, 879};
+		int[] b = new int[]{12345, 12345, 12345, 12345, 12345, 12345, 12345, 12345};
+		RadixSort.radixSort(a, 4);
+		printArray(a);
+	}
 
 }
