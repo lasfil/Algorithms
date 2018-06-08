@@ -1,10 +1,21 @@
 package sort;
 
-public class HeapSort extends Sort {
+import java.util.Arrays;
 
-	public static void heapSort(int[] a) {
+import org.junit.Test;
+
+public class HeapSort extends Sort {
+	@Test
+	public void test() {
+
+		System.out.println(Arrays.toString(heapSort(new int[] { 33, 221, 221, 167, 151, 173, 60, 58, 44, 181, 207,
+				287, 281, 297, 204, 249, 111, 163, 291, 132, 200, 129, 205, 11, 57, 183, 175, 103, 68, 276, 251, 192,
+				177, 77, 246, 239, 105, 28, 204, 70, 292, 91, 211, 140, 228, 203, 67, 127, 100, 282 })));
+	}
+
+	public static int[] heapSort(int[] a) {
 		if (a == null || a.length < 2) {
-			return;
+			return a;
 		}
 
 		buildMaxHeap(a);
@@ -13,6 +24,7 @@ public class HeapSort extends Sort {
 			swap(a, i, 0);
 			maxHeapify(a, 0, i - 1);
 		}
+		return a;
 	}
 
 	public static void buildMaxHeap(int[] a) {
@@ -29,10 +41,9 @@ public class HeapSort extends Sort {
 			// large是左右孩子中更大的那个的下标
 			// 注意一种情况就是右孩子不存在
 
-			int larger = end;
+			int larger = 2 * index + 1;
 			if (2 * index + 2 <= end) {
-				larger = a[index * 2 + 1] > a[index * 2 + 2] ? index * 2 + 1
-						: index * 2 + 2;
+				larger = a[index * 2 + 1] > a[index * 2 + 2] ? index * 2 + 1 : index * 2 + 2;
 			}
 			// index的值比larger大的话证明堆的顺序正确，不需要再继续
 			if (a[index] > a[larger]) {
